@@ -1,6 +1,7 @@
 import logging
 import sys
 import os
+from urllib import response
 import telegram
 import requests
 import time
@@ -43,7 +44,7 @@ HOMEWORK_STATUSES = {
 def send_message(bot, message):
     """Отправляет сообщение в Телеграм."""
     try:
-        bot.send_message(chat_id=TELEGRAM_CHAT_ID,text=message)
+        bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
         logger.info('Сообщение отправлено')
     except Exception as error:
         logging.error(f'{error} Не удалось отправить сообщение')
@@ -54,13 +55,13 @@ def get_api_answer(current_timestamp):
     timestamp = current_timestamp
     params = {'from_date': timestamp}
     try:
-        homework_statuses = requests.get(ENDPOINT, headers=HEADERS, params=params)
+        response = requests.get(ENDPOINT, headers=HEADERS, params=params)
     except requests.exceptions.RequestException as e:
         raise SystemExit(e)
-    if homework_statuses.status_code != 200:
-        logger.error(f'Статус код: {homework_statuses.status_code}')
-        raise Exception(f'Статус код: {homework_statuses.status_code}')
-    return homework_statuses.json()
+    if response.status_code != 200:
+        logger.error(f'Статус код: {response.status_code}')
+        raise Exception(f'Статус код: {response.status_code}')
+    return response.json()
 
 
 def check_response(response):
@@ -69,6 +70,7 @@ def check_response(response):
     if type(homeworks) != list:
         raise TypeError(f'{type(homeworks)} - это не список!')
     return homeworks
+
 
 def parse_status(homework):
     """Извлекает из информации о домашней работе статус этой работы."""
