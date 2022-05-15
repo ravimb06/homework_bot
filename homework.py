@@ -1,7 +1,6 @@
 import logging
 import sys
 import os
-from urllib import response
 import telegram
 import requests
 import time
