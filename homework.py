@@ -109,9 +109,9 @@ def check_tokens():
     if tokens_none:
         logger.critical('Отсутствует токен(ы): ' + ', '.join(tokens_none))
         return False
-    else:  #Без этого тесты не пропускают
+    else:
         return True
-
+#Без этого else тесты не пропускают
 
 def main():
     """Основная логика работы бота."""
