@@ -111,7 +111,8 @@ def check_tokens():
         return False
     else:
         return True
-#Без этого else тесты не пропускают
+# Без этого else тесты не пропускают
+
 
 def main():
     """Основная логика работы бота."""
@@ -124,7 +125,7 @@ def main():
             homeworks = check_response(response)
             if homeworks:
                 homework = check_response(response)
-                message = parse_status(homework)
+                message = parse_status(homework[0])
                 send_message(bot, message)
             else:
                 message = 'Вы не сдали ни одной домашки за этот период'
