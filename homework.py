@@ -60,7 +60,9 @@ def get_api_answer(current_timestamp):
         raise exceptions.EndpointRequestError(e)
     if response.status_code != 200:
         logger.error(f'Код {response.status_code}. Эндпоинт недоступен')
-        raise exceptions.EndpointError(f'Код {response.status_code}. Эндпоинт недоступен')
+        raise exceptions.EndpointError(
+            f'Код {response.status_code}. Эндпоинт недоступен'
+        )
     return response.json()
 
 
@@ -107,7 +109,7 @@ def check_tokens():
     if tokens_none:
         logger.critical('Отсутствует токен(ы): ' + ', '.join(tokens_none))
         return False
-    else:#Без этого тесты не пропускают
+    else:  #Без этого тесты не пропускают
         return True
 
 
