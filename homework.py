@@ -118,7 +118,8 @@ def main():
     """Основная логика работы бота."""
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     current_timestamp = 0
-    check_tokens()
+    if not check_tokens():
+        raise exceptions.TokensNoneError
     while True:
         try:
             response = get_api_answer(current_timestamp)
@@ -135,7 +136,6 @@ def main():
             message = 'Сбой в работе программы'
             logger.exception(message)
             send_message(bot, message)
-            time.sleep(TELEGRAM_RETRY_TIME)
         finally:
             time.sleep(TELEGRAM_RETRY_TIME)
 

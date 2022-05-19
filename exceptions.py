@@ -10,3 +10,5 @@ class ResponseIsNotDict(Exception):
     pass
 
 
+class TokensNoneError(ValueError):
+    pass
