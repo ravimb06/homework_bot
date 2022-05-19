@@ -1,3 +1,4 @@
+from ast import While
 import logging
 import sys
 import os
@@ -57,7 +58,9 @@ def get_api_answer(current_timestamp):
     try:
         response = requests.get(ENDPOINT, headers=HEADERS, params=params)
     except requests.exceptions.RequestException as e:
-        raise exceptions.EndpointRequestError(e)
+        raise exceptions.EndpointRequestError(
+            'Ошибка запроса к эндпоинт'
+        ) from e
     if response.status_code != 200:
         logger.error(f'Код {response.status_code}. Эндпоинт недоступен')
         raise exceptions.EndpointError(
@@ -69,12 +72,12 @@ def get_api_answer(current_timestamp):
 def check_response(response):
     """Проверяет ответ API на корректность."""
     if not isinstance(response, dict):
-        raise TypeError(f'{type(response)} - это не словарь!')
-    if 'homeworks' not in response.keys():
+        raise TypeError('ожидается словарь!')
+    if 'homeworks' not in response:
         raise KeyError('Отсутствует ключ "homeworks"')
     homeworks = response['homeworks']
     if not isinstance(homeworks, list):
-        raise TypeError(f'{type(homeworks)} - это не список!')
+        raise TypeError('ожидается список!')
     return homeworks
 
 
@@ -109,9 +112,7 @@ def check_tokens():
     if tokens_none:
         logger.critical('Отсутствует токен(ы): ' + ', '.join(tokens_none))
         return False
-    else:
-        return True
-# Без этого else тесты не пропускают
+    return True
 
 
 def main():
@@ -140,6 +141,5 @@ def main():
             time.sleep(TELEGRAM_RETRY_TIME)
 
 
-if check_tokens():
-    if __name__ == '__main__':
-        main()
+if check_tokens() and __name__ == '__main__':
+    main()
